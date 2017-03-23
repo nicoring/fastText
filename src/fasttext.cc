@@ -143,6 +143,15 @@ void FastText::skipgram(Model& model, real lr,
   }
 }
 
+void FastText::depsbased(Model& model, real lr, const std::vector<int32_t>& line) {
+  std::uniform_int_distribution<> uniform(1, args_->ws);
+  int32_t boundary = uniform(model.rng);
+  const std::vector<int32_t>& ngrams = dict_->getNgrams(line[0]);
+  for (int32_t c = 1; c <= boundary * 2 && c < line.size(); c++) {
+    model.update(ngrams, line[c], lr);
+  }
+}
+
 void FastText::test(std::istream& in, int32_t k) {
   int32_t nexamples = 0, nlabels = 0;
   double precision = 0.0;
@@ -265,6 +274,8 @@ void FastText::trainThread(int32_t threadId) {
       cbow(model, lr, line);
     } else if (args_->model == model_name::sg) {
       skipgram(model, lr, line);
+    } else if(args_->model == model_name::dep) {
+      depsbased(model, lr, line);
     }
     if (localTokenCount > args_->lrUpdateRate) {
       tokenCount += localTokenCount;

@@ -42,5 +42,8 @@ fasttext.o: src/fasttext.cc src/*.h
 fasttext: $(OBJS) src/fasttext.cc
 	$(CXX) $(CXXFLAGS) $(OBJS) src/main.cc -o fasttext
 
+test: src/test.cc
+	$(CXX) $(CXXFLAGS) src/test.cc -o test
+
 clean:
 	rm -rf *.o fasttext

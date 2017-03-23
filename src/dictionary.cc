@@ -173,14 +173,22 @@ bool Dictionary::readWord(std::istream& in, std::string& word) const
 void Dictionary::readFromFile(std::istream& in) {
   std::string word;
   int64_t minThreshold = 1;
+  bool shouldAdd = true;
   while (readWord(in, word)) {
-    add(word);
-    if (ntokens_ % 1000000 == 0 && args_->verbose > 1) {
-      std::cout << "\rRead " << ntokens_  / 1000000 << "M words" << std::flush;
+    if (shouldAdd) {
+      add(word);
+      if (ntokens_ % 1000000 == 0 && args_->verbose > 1) {
+        std::cout << "\rRead " << ntokens_  / 1000000 << "M words" << std::flush;
+      }
+      if (size_ > 0.75 * MAX_VOCAB_SIZE) {
+        minThreshold++;
+        threshold(minThreshold, minThreshold);
+      }
     }
-    if (size_ > 0.75 * MAX_VOCAB_SIZE) {
-      minThreshold++;
-      threshold(minThreshold, minThreshold);
+    if (word == EOS) {
+      shouldAdd = true;
+    } else {
+      shouldAdd = false;
     }
   }
   threshold(args_->minCount, args_->minCountLabel);

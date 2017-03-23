@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
     exit(EXIT_FAILURE);
   }
   std::string command(argv[1]);
-  if (command == "skipgram" || command == "cbow" || command == "supervised") {
+  if (command == "skipgram" || command == "cbow" || command == "supervised" || command == "deps") {
     train(argc, argv);
   } else if (command == "test") {
     test(argc, argv);
