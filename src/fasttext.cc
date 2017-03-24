@@ -161,10 +161,14 @@ void FastText::skipgram(Model& model, real lr,
 }
 
 void FastText::depsbased(Model& model, real lr, const std::vector<int32_t>& line) {
+  // std::cout << "depsbased" << std::endl;
   std::uniform_int_distribution<> uniform(1, args_->ws);
   int32_t boundary = uniform(model.rng);
   const std::vector<int32_t>& ngrams = dict_->getNgrams(line[0]);
   for (int32_t c = 1; c <= boundary * 2 && c < line.size(); c++) {
+    // std::cout << "model update word: " << dict_->getWord(line[0]) << " context: " << dict_->getWord(line[c]) << std::endl;
+    // std::cout << "ngrams " << ngrams[0] << " " <<ngrams[1] << std::endl;
+    // std::cout << "word" << dict_->getWord(line[c]) << std::endl;
     model.update(ngrams, line[c], lr);
   }
 }

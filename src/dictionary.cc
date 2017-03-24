@@ -225,7 +225,7 @@ void Dictionary::readFromFile(std::istream& in) {
     if (word == EOS) {
       shouldAdd = true;
     } else {
-      shouldAdd = false;
+      shouldAdd = true;
     }
   }
   threshold(args_->minCount, args_->minCountLabel);
