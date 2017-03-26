@@ -225,7 +225,7 @@ void Dictionary::readFromFile(std::istream& in) {
     if (word == EOS) {
       shouldAdd = true;
     } else {
-      shouldAdd = true;
+      shouldAdd = false;
     }
   }
   threshold(args_->minCount, args_->minCountLabel);
@@ -320,7 +320,11 @@ int32_t Dictionary::getLine(std::istream& in,
     if (words.size() > MAX_LINE_SIZE && args_->model != model_name::sup) break;
     if (token == EOS) break;
   }
-  return ntokens;
+  if (args_->model == model_name::dep) {
+    return 1;
+  } else {
+    return ntokens;
+  }
 }
 
 std::string Dictionary::getLabel(int32_t lid) const {
