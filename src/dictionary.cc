@@ -212,7 +212,7 @@ void Dictionary::readFromFile(std::istream& in) {
   bool shouldAdd = true;
   bool addAll = args_->model != model_name::dep;
   while (readWord(in, word)) {
-    if (addAll || shouldAdd) {
+    if (word != EOS && (addAll || shouldAdd)) {
       add(word);
       if (ntokens_ % 1000000 == 0 && args_->verbose > 1) {
         std::cout << "\rRead " << ntokens_  / 1000000 << "M words" << std::flush;
